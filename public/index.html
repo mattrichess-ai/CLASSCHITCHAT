@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClassChitChat 📻</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Login Screen -->
+  <div id="login-screen" class="screen">
+    <div class="login-box">
+      <h1>📻 ClassChitChat</h1>
+      <p class="subtitle">Walkie-talkie for your class</p>
+      <label for="username-input">Your name</label>
+      <input id="username-input" type="text" placeholder="e.g. Alex" maxlength="32" autocomplete="off" />
+      <label for="room-input">Room / Channel</label>
+      <input id="room-input" type="text" placeholder="e.g. Math101" maxlength="64" value="general" autocomplete="off" />
+      <button id="join-btn" class="btn-primary">Join Channel</button>
+      <p id="login-error" class="error-msg" hidden></p>
+    </div>
+  </div>
+
+  <!-- Chat Screen -->
+  <div id="chat-screen" class="screen" hidden>
+    <header class="chat-header">
+      <span id="header-room">📻 general</span>
+      <div class="header-status">
+        <span id="signal-dot" class="signal-dot"></span>
+        <span id="status-label">Standby</span>
+      </div>
+      <button id="leave-btn" class="btn-leave">Leave</button>
+    </header>
+
+    <div id="users-bar">
+      <span class="users-label">Online:</span>
+      <span id="users-list">—</span>
+    </div>
+
+    <!-- Channel-busy banner (shown when someone else is transmitting) -->
+    <div id="busy-banner" class="busy-banner" hidden>
+      <span id="busy-username"></span> is transmitting…
+    </div>
+
+    <!-- Message log -->
+    <ul id="message-log" aria-live="polite" aria-label="Message log"></ul>
+
+    <!-- Push-to-talk controls -->
+    <div class="ptt-area">
+      <p class="ptt-hint">Hold the button to transmit</p>
+      <button id="ptt-btn"
+              class="ptt-btn"
+              aria-label="Push to talk"
+              title="Hold to transmit">
+        🎙️
+      </button>
+      <p id="ptt-status" class="ptt-status">Ready</p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
