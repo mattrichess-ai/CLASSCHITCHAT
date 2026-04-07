@@ -1,0 +1,245 @@
+/* ── Reset & base ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0d1117;
+  --surface:   #161b22;
+  --border:    #30363d;
+  --text:      #e6edf3;
+  --muted:     #8b949e;
+  --accent:    #238636;
+  --accent-h:  #2ea043;
+  --danger:    #da3633;
+  --warn-bg:   #b08800;
+  --ptt-idle:  #1f6feb;
+  --ptt-on:    #da3633;
+  --ptt-size:  110px;
+  --radius:    10px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Screens ───────────────────────────────────────────────── */
+.screen { width: 100%; max-width: 480px; }
+#chat-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-width: 100%;
+}
+
+/* ── Login ─────────────────────────────────────────────────── */
+.login-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.login-box h1 { font-size: 1.8rem; text-align: center; }
+.login-box .subtitle { color: var(--muted); text-align: center; margin-bottom: 0.6rem; }
+.login-box label { font-size: 0.85rem; color: var(--muted); margin-top: 0.4rem; }
+
+input {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.55rem 0.75rem;
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+input:focus { border-color: var(--ptt-idle); }
+
+.btn-primary {
+  margin-top: 0.6rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.65rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-primary:hover { background: var(--accent-h); }
+
+.error-msg { color: var(--danger); font-size: 0.85rem; text-align: center; }
+
+/* ── Chat header ───────────────────────────────────────────── */
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+#header-room { font-weight: 600; flex: 1; }
+.header-status { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: var(--muted); }
+
+.signal-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: background 0.2s;
+}
+.signal-dot.live { background: var(--ptt-on); box-shadow: 0 0 6px var(--ptt-on); animation: pulse 1s infinite; }
+.signal-dot.ready { background: var(--accent); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.btn-leave {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  padding: 0.3rem 0.65rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.btn-leave:hover { color: var(--danger); border-color: var(--danger); }
+
+/* ── Users bar ─────────────────────────────────────────────── */
+#users-bar {
+  padding: 0.4rem 1rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.users-label { font-weight: 600; margin-right: 0.4rem; }
+
+/* ── Busy banner ───────────────────────────────────────────── */
+.busy-banner {
+  background: var(--warn-bg);
+  color: #fff;
+  text-align: center;
+  padding: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  flex-shrink: 0;
+  animation: blink 0.8s step-start infinite;
+}
+@keyframes blink { 50% { opacity: 0.6; } }
+
+/* ── Message log ───────────────────────────────────────────── */
+#message-log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#message-log li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  max-width: 90%;
+}
+
+#message-log li.self { align-self: flex-end; align-items: flex-end; }
+#message-log li.other { align-self: flex-start; }
+#message-log li.system {
+  align-self: center;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-style: italic;
+  max-width: 100%;
+}
+
+.msg-meta {
+  font-size: 0.72rem;
+  color: var(--muted);
+  padding: 0 0.3rem;
+}
+
+.msg-bubble {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+li.self .msg-bubble {
+  background: #0d4429;
+  border-color: var(--accent);
+}
+
+.msg-bubble audio {
+  height: 32px;
+  max-width: 220px;
+}
+
+/* ── PTT area ──────────────────────────────────────────────── */
+.ptt-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.2rem 1rem 1.6rem;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.ptt-hint { font-size: 0.8rem; color: var(--muted); }
+
+.ptt-btn {
+  width: var(--ptt-size);
+  height: var(--ptt-size);
+  border-radius: 50%;
+  border: 3px solid var(--ptt-idle);
+  background: transparent;
+  font-size: 2.4rem;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, transform 0.1s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+.ptt-btn:hover:not(:disabled) { background: rgba(31, 111, 235, 0.15); }
+.ptt-btn.transmitting {
+  background: rgba(218, 54, 51, 0.2);
+  border-color: var(--ptt-on);
+  transform: scale(1.08);
+  animation: ring 0.9s ease-out infinite;
+}
+.ptt-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+@keyframes ring {
+  0%   { box-shadow: 0 0 0 0 rgba(218, 54, 51, 0.5); }
+  70%  { box-shadow: 0 0 0 14px rgba(218, 54, 51, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(218, 54, 51, 0); }
+}
+
+.ptt-status { font-size: 0.85rem; color: var(--muted); min-height: 1.2em; }
+
+/* ── Scrollbar ─────────────────────────────────────────────── */
+#message-log::-webkit-scrollbar { width: 6px; }
+#message-log::-webkit-scrollbar-track { background: transparent; }
+#message-log::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
