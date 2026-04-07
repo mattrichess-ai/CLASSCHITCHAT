@@ -1,0 +1,264 @@
+<html>
+<head>
+  <title>Walkie-Talkie Chat</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; }
+    
+    .walkie-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: white;
+      max-width: 800px;
+      margin: 0 auto;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #2c5aa0 0%, #1a3a5c 100%);
+      color: white;
+      padding: 16px;
+      text-align: center;
+      font-weight: 500;
+      font-size: 18px;
+      border-bottom: 2px solid rgba(0,0,0,0.2);
+    }
+    
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #f9f9f9;
+    }
+    
+    .message {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    
+    .message.sent {
+      justify-content: flex-end;
+    }
+    
+    .message-bubble {
+      max-width: 70%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+    
+    .message.received .message-bubble {
+      background: white;
+      border: 1px solid #ddd;
+      color: #333;
+    }
+    
+    .message.sent .message-bubble {
+      background: #2c5aa0;
+      color: white;
+    }
+    
+    .message-meta {
+      font-size: 12px;
+      color: #999;
+      margin-top: 2px;
+    }
+    
+    .message.sent .message-meta {
+      text-align: right;
+      color: #2c5aa0;
+    }
+    
+    .input-area {
+      padding: 12px 16px;
+      border-top: 1px solid #ddd;
+      display: flex;
+      gap: 8px;
+      background: white;
+    }
+    
+    input[type="text"] {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #2c5aa0;
+      box-shadow: 0 0 0 2px rgba(44, 90, 160, 0.1);
+    }
+    
+    button {
+      padding: 10px 20px;
+      background: #2c5aa0;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    button:hover {
+      background: #1a3a5c;
+    }
+    
+    button:active {
+      transform: scale(0.98);
+    }
+    
+    .user-select {
+      padding: 12px 16px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: #f9f9f9;
+      align-items: center;
+    }
+    
+    .user-select label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    
+    input[type="radio"] {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="walkie-container">
+  <div class="header">
+    📡 CLASSROOM WALKIE-TALKIE CHAT
+  </div>
+  
+  <div class="user-select">
+    <strong>Chat as:</strong>
+    <label><input type="radio" name="user" value="Alex" checked /> Alex</label>
+    <label><input type="radio" name="user" value="Jordan" /> Jordan</label>
+    <label><input type="radio" name="user" value="Sam" /> Sam</label>
+    <label><input type="radio" name="user" value="Casey" /> Casey</label>
+  </div>
+  
+  <div class="messages" id="messages">
+    <div class="message received">
+      <div>
+        <div class="message-bubble">yo what's up everyone 👋</div>
+        <div class="message-meta">Jordan • 2:34 PM</div>
+      </div>
+    </div>
+    
+    <div class="message sent">
+      <div>
+        <div class="message-bubble">hey!! ready for the project?</div>
+        <div class="message-meta">You • 2:35 PM</div>
+      </div>
+    </div>
+    
+    <div class="message received">
+      <div>
+        <div class="message-bubble">lol not even close 💀 but let's figure it out together</div>
+        <div class="message-meta">Sam • 2:36 PM</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="input-area">
+    <input type="text" id="messageInput" placeholder="Break... go ahead" />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<script>
+  const messagesEl = document.getElementById('messages');
+  const inputEl = document.getElementById('messageInput');
+  const userRadios = document.querySelectorAll('input[name="user"]');
+  
+  let currentUser = 'Alex';
+  
+  userRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      currentUser = e.target.value;
+    });
+  });
+  
+  function sendMessage() {
+    const text = inputEl.value.trim();
+    if (!text) return;
+    
+    const now = new Date();
+    const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message sent';
+    messageDiv.innerHTML = `
+      <div>
+        <div class="message-bubble">${escapeHtml(text)}</div>
+        <div class="message-meta">You • ${time}</div>
+      </div>
+    `;
+    
+    messagesEl.appendChild(messageDiv);
+    inputEl.value = '';
+    inputEl.focus();
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    
+    // Simulate a response after 1.5 seconds
+    setTimeout(() => {
+      const responses = {
+        'Alex': ["lol nice", "wait what", "no cap?", "ok cool cool", "that's wild"],
+        'Jordan': ["facts", "absolutely", "nah fr?", "haha that's wild", "fr fr"],
+        'Sam': ["100%", "deadass", "let me check", "lemme ask someone", "bet"],
+        'Casey': ["word", "bruh", "same", "i feel that", "no shot"]
+      };
+      
+      const randomResponse = responses[currentUser][Math.floor(Math.random() * responses[currentUser].length)];
+      const nowResp = new Date();
+      const timeResp = nowResp.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      
+      const respDiv = document.createElement('div');
+      respDiv.className = 'message received';
+      respDiv.innerHTML = `
+        <div>
+          <div class="message-bubble">${randomResponse}</div>
+          <div class="message-meta">${currentUser} • ${timeResp}</div>
+        </div>
+      `;
+      
+      messagesEl.appendChild(respDiv);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }, 800);
+  }
+  
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+  
+  inputEl.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+  });
+  
+  inputEl.focus();
+</script>
+
+</body>
+</html>
