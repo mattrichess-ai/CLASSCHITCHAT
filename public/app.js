@@ -1,4 +1,4 @@
-/* global app.js for ClassChitChat */
+// app.js - ClassChitChat client
 'use strict';
 
 // ── DOM refs ──────────────────────────────────────────────────
